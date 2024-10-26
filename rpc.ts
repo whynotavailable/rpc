@@ -6,6 +6,12 @@ export class Service {
   types: Type[] = [];
   constructor(public name: string) {}
 
+  /**
+   * Add a new type to the service
+   * @param name the name of the type
+   * @param props an optional list of initial props
+   * @return The created type
+   */
   type(name: string, props: Prop[] = []): Type {
     let t = new Type(name, props);
     this.types.push(t);

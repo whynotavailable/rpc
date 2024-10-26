@@ -1,6 +1,6 @@
 {
   "name": "@whynot/rpc",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "exports": "./rpc.ts",
   "tasks": {
     "dev": "deno run --watch main.ts"
