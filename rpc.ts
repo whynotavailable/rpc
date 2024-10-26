@@ -1,6 +1,12 @@
+export * from "./models.ts";
+
 export type PropKind =
   | "string"
   | "int";
+
+export type PropMods =
+  | "null"
+  | "list";
 
 export class Service {
   types: Type[] = [];
@@ -10,9 +16,8 @@ export class Service {
    * Add a new type to the service
    * @param name the name of the type
    * @param props an optional list of initial props
-   * @return The created type
    */
-  type(name: string, props: Prop[] = []): Type {
+  type(name: string, props: Record<string, PropDef> = {}): Type {
     let t = new Type(name, props);
     this.types.push(t);
 
@@ -21,32 +26,51 @@ export class Service {
 }
 
 export class Type {
-  constructor(public name: string, public props: Prop[]) {}
+  constructor(public name: string, public props: Record<string, PropDef>) {}
 
   prop(
     name: string,
     kind: PropKind,
-    options: Omit<Prop, "name" | "kind"> = {},
+    ...mods: PropMods[]
   ): Type {
-    let p: Prop = {
-      name,
+    this.props[name] = {
       kind,
-      ...options,
+      mods,
     };
-    this.props.push(p);
 
     return this;
   }
 
-  propList(props: Prop[]): Type {
-    this.props = [...this.props, ...props];
+  /**
+   * Alias to prop
+   */
+  p = this.prop;
+
+  /**
+   * Append a list of props to the type
+   */
+  propSet(props: Record<string, PropDef | PropKind>): Type {
+    for (let key in props) {
+      let val = props[key];
+
+      if (typeof val === "string") {
+        this.props[key] = {
+          kind: val,
+        };
+      } else {
+        this.props[key] = val;
+      }
+    }
     return this;
   }
+
+  /**
+   * Alias to propList
+   */
+  ps = this.propSet;
 }
 
-export interface Prop {
-  name: string;
+export interface PropDef {
   kind: PropKind;
-  isNull?: boolean;
-  isList?: boolean;
+  mods?: PropMods[];
 }
