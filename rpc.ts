@@ -1,4 +1,6 @@
-export type PropKind = string;
+export type PropKind =
+  | "string"
+  | "int";
 
 export class Service {
   types: Type[] = [];
@@ -27,6 +29,11 @@ export class Type {
     };
     this.props.push(p);
 
+    return this;
+  }
+
+  propList(props: Prop[]): Type {
+    this.props = [...this.props, ...props];
     return this;
   }
 }
