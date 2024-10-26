@@ -8,6 +8,8 @@ export type PropMods =
   | "null"
   | "list";
 
+export type PropSet = Record<string, PropDef | PropKind>;
+
 export class Service {
   types: Type[] = [];
   constructor(public name: string) {}
@@ -49,7 +51,7 @@ export class Type {
   /**
    * Append a list of props to the type
    */
-  propSet(props: Record<string, PropDef | PropKind>): Type {
+  propSet(props: PropSet): Type {
     for (let key in props) {
       let val = props[key];
 
@@ -61,6 +63,7 @@ export class Type {
         this.props[key] = val;
       }
     }
+
     return this;
   }
 
